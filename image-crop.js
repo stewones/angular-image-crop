@@ -759,7 +759,7 @@
   })();
 
   angular.module('ImageCropper',[])
-    .directive('imageCrop', function() {
+    .directive('imageCrop', /*@ngInject*/ function($rootScope) {
 
       return {
         template: '<div id="image-crop-{{ rand }}" class="ng-image-crop ng-image-crop--{{ shape }}" ng-style="moduleStyles"><section ng-style="sectionStyles" ng-show="step==1"><input type="file" class="image-crop-input" /></section><section ng-style="sectionStyles" ng-show="step==2"><canvas class="cropping-canvas" width="{{ canvasWidth }}" height="{{ canvasHeight }}" ng-mousemove="onCanvasMouseMove($event)" ng-mousedown="onCanvasMouseDown($event)" ng-mouseup="onCanvasMouseUp($event)"></canvas><div ng-style="croppingGuideStyles" class="cropping-guide"></div><div class="zoom-handle" ng-mousemove="onHandleMouseMove($event)" ng-mousedown="onHandleMouseDown($event)" ng-mouseup="onHandleMouseUp($event)"><span>&larr; zoom &rarr;</span></div><button ng-click="crop()">Crop</button></section><section ng-style="sectionStyles" class="image-crop-section-final" ng-show="step==3"><img class="image-crop-final" ng-src="{{ croppedDataUri }}" /></section></div>',
@@ -823,7 +823,9 @@
             top: '50px',
             left: '50px'
           };
-
+          
+          $rootScope.$on('CropReset', function() { reset() })
+          
           // ---------- EVENT HANDLERS ---------- //
           fileReader.onload = function(e) {
             $img.src = this.result;
